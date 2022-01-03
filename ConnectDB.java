@@ -61,7 +61,7 @@ public class ConnectDB {
 		}
 		return record;
 	}
-	public ResultSet listAccount(String sql) {
+	public ResultSet listAll(String sql) {
 		try {
 			connect();
 			stmt = conn.createStatement();
