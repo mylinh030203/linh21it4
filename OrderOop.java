@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 import java.util.Calendar;
 import giaodien.ConnectDB;
 public class OrderOop extends JFrame{
@@ -67,7 +68,11 @@ public class OrderOop extends JFrame{
 						//java.sql.Date OrderDate = convertUtilToSql(selectedOrderDate);
 						java.sql.Date OrderDate = convertUtilToSql(selectedOrderDate);
 						ConnectDB conn = new ConnectDB();
+						//checkOrdetID(tfID.getText());
+						//checkbirthday(tfOrderID.getText());
+						checkpass(tfOrderID.getText());
 						int record = conn.executeDB("Insert into Orderl values('"+tfOrderID.getText()+"','"+OrderDate+"','"+tfID.getText()+"','"+tfProductID.getText()+"','"+tfQuantity.getText()+"')");
+						
 						if (record>0) JOptionPane.showMessageDialog(null, "Success");
 					}catch (Exception e1) {
 						// TODO Auto-generated catch block
@@ -108,6 +113,30 @@ public class OrderOop extends JFrame{
 				e1.printStackTrace();
 			}
 	        
+	}
+	//kiểm tra xem đúng định dạng email không.
+	public void checkOrdetID(String str ) throws Exception {
+		String emailulg = "^[\\w-]+@([\\w- ]+\\.)+[\\w-]+$";
+		//^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$
+		Boolean b = str.matches(emailulg);
+		if(b==false) throw new Exception("Dia chi Email khong hop le");
+	}
+	public void checkbirthday (String str) throws Exception {
+		Pattern patternDate = Pattern.compile("^\\d{2}[-|/]\\d{2}[-|/]\\d{4}$");
+		Boolean b= patternDate.matcher(str).matches();
+		if(b==false) throw new Exception("Ngay thang nam sinh khong hop le");
+	}
+	/*+ Phải chứa ít nhất 1 ký tự số từ 0 – 9
+          + Phải chứa ít nhất 1 ký tự chữ thường
+          + Phải chứa ít nhất 1 ký tự chữ hoa
+          + Phải chứa ít nhất 1 ký tự trong tập các ký tự
+          X{n,m} So khớp với ít nhất n và nhiều nhất m lần xuất hiện của X
+          X? So khớp 0 hoặc 1 sự xuất hiện của X, viết gọn cho X{0,1}
+	  */
+	public void checkpass(String str ) throws Exception {
+		String pass = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%!]).{6,20}";
+		Boolean b = str.matches(pass);
+		if(b==false) throw new Exception("Password khong hop le");
 	}
 
 	public static void main(String[] args) {
